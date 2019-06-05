@@ -53,7 +53,9 @@ DJANGO_APPS = [
     'whitenoise.runserver_nostatic',
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'core.orders.apps.OrdersConfig',
+]
 
 THIRD_PARTY_APPS = [
     'crispy_forms',
