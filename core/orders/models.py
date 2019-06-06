@@ -10,13 +10,16 @@ class Order(models.Model):
     created_date = models.DateTimeField(_('Created Date'), default=random_date, blank=True)
 
     def __str__(self):
-        return f'{self.number} was created {self.created_date.strftime("%Y-%m-%d %H:%M")}'
+        return f'{self.number}'
 
     class Meta:
         ordering = ['-pk']
 
     def save(self, *args, **kwargs):
-        self.number = Order.objects.all().count()+1
+        try:
+            self.number = Order.objects.all().values('pk')[0]['pk']+1
+        except:
+            self.number = 1
         super(Order, self).save(*args, **kwargs)
 
 
