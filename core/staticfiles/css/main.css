@@ -19,7 +19,7 @@
 
 .numberinput { width: 95%; }
 
-.number-form, .order-by-date-form {
+.number-form, .order-by-date-form, body .content-orders-by-date {
     border-top: 1px solid #ede8e8;
     border-bottom: 1px solid #ede8e8;
     box-shadow: 0px 0px 7px black;
@@ -67,8 +67,31 @@
 .order-by-date-form .form-group { padding-left: 15%; }
 
 .order-by-date-form button {
-    margin-left: 35%;
+    margin-left: 33%;
     margin-right: 3%;
 }
 
 .order-by-date-form .form-group label { padding-left: 27%; }
+
+
+
+/*  ORDER BY DATE - TABLE  */
+body .df-tables {
+    margin-top: 2%;
+}
+
+body .df-tables thead {
+    background: #9FCDFF;
+}
+
+body .df-tables thead tr th {
+    text-align: center;
+}
+
+body .df-tables tbody tr:hover {
+    background: #9FCDFF;
+}
+
+tr:nth-child(2n) {
+    background: #e8edff;
+}

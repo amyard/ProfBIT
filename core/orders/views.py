@@ -6,9 +6,10 @@ from django.views.generic import View
 
 from core.orders.forms import GenerateOrderForm, OrderByDateForm
 from core.orders.models import Order, OrderItem
+from core.common.script import get_orders_by_date
 
 from random import randint
-
+import pandas as pd
 
 
 
@@ -54,7 +55,14 @@ class OrderByDateView(View):
     def post(self, request, *args, **kwargs):
         form = self.form(request.POST or None)
         if form.is_valid():
-            messages.success(self.request, 'Success: AWESOME')
-            return HttpResponseRedirect(reverse('orders:order_by_date'))
+            start = form.cleaned_data['start_period']
+            end = form.cleaned_data['end_date']
+            orders = OrderItem.objects.filter(order_id__created_date__range = [start, end]).order_by('-order_id__created_date')
+
+            df = pd.DataFrame(list(OrderItem.objects.filter(order_id__created_date__range=[start, end]).order_by('-order_id__created_date').values('order_id__created_date','order_id', 'product_name','product_price','amount')))
+            df_result = get_orders_by_date(df)
+
+            context={'orders':orders, 'form':self.form, 'df_result':df_result}
+            return render(self.request, self.template_name, context)
         context = {'form': self.form(request.POST or None)}
         return render(self.request, self.template_name, context)

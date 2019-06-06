@@ -46,10 +46,15 @@
 
 
 
+
 <!--  CONTENT  -->
-<div class="container mt-5">
+{% if orders %}
+<div class="container mt-5 content-orders-by-date">
+
+    {{ df_result|safe }}
+
 
 </div>
-
+{% endif %}
 
 {% endblock %}

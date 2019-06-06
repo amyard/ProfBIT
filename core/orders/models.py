@@ -41,3 +41,6 @@ class OrderItem(models.Model):
         self.product_price = random.randint(100, 9999)
         self.amount = random.randint(1, 10)
         super(OrderItem, self).save(*args, **kwargs)
+
+    def full_price(self):
+        return self.product_price*self.amount
