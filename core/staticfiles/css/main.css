@@ -95,3 +95,7 @@ body .df-tables tbody tr:hover {
 tr:nth-child(2n) {
     background: #e8edff;
 }
+
+tbody tr td:nth-child(5n) {
+    text-align: left;
+}

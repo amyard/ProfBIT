@@ -1,5 +1,7 @@
 from random import randrange
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, time
+from django.utils import timezone
+
 
 def random_date():
     start = datetime.strptime('01/01/2018 9:00', '%m/%d/%Y %I:%M')
@@ -13,7 +15,13 @@ def random_date():
 
 def get_random_date(n):
     start = datetime.strptime('01/01/2018 9:00', '%m/%d/%Y %I:%M')
-    res = start + timedelta(hours=n)
+    aware_datetime = timezone.make_aware(start)
+    res = aware_datetime + timedelta(hours=n)
     return res
 
+
+def clean_date_for_orderbydateview(value):
+    start_date = datetime.combine(value, time(00, 00))
+    start = timezone.make_aware(start_date)
+    return start
 
