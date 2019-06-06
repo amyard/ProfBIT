@@ -19,14 +19,18 @@
 
 .numberinput { width: 95%; }
 
-.number-form {
+.number-form, .order-by-date-form {
     border-top: 1px solid #ede8e8;
     border-bottom: 1px solid #ede8e8;
-    padding-left: 25%;
     box-shadow: 0px 0px 7px black;
 }
 
+.form-row { padding-left: 25%; }
 
+.number-form hr {
+    width:70%;
+    background: #9FCDFF;
+}
 
 
 
@@ -49,3 +53,22 @@
 .admin-panel:hover {
   opacity: 1;
 }
+
+
+/*  ORDER BY DATE  */
+.order-by-date-form {
+    width: 50%;
+    margin-left: 20%;
+}
+
+
+#id_start_period, #id_end_date { width: 80%; }
+
+.order-by-date-form .form-group { padding-left: 15%; }
+
+.order-by-date-form button {
+    margin-left: 35%;
+    margin-right: 3%;
+}
+
+.order-by-date-form .form-group label { padding-left: 27%; }
