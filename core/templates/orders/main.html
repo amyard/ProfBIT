@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="container">
+
+    <form action="" method="POST" class="mt-5 pt-3 number-form">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                {{ form.number|as_crispy_field }}
+                <div class="{% if form.number.errors %} invalid{% endif %}">
+						  {% for error in form.number.errors %}
+						  {% endfor %}
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <input type="submit" value="Сгенерировать" class="submit-btn btn btn-outline-primary">
+            </div>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

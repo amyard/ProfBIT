@@ -1,0 +1,27 @@
+/*  HEADER  */
+
+.navbar { background: #9FCDFF; }
+
+.navbar .navbar-brand { color: #343A40; }
+
+.navbar .navbar-brand:hover {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+
+/*  BASE PAGE  */
+.help-block {
+    color: #c82333;
+}
+
+.numberinput { width: 95%; }
+
+.number-form {
+    border-top: 1px solid #ede8e8;
+    border-bottom: 1px solid #ede8e8;
+    padding-left: 25%;
+    box-shadow: 0px 0px 7px black;
+}
