@@ -1,13 +1,13 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from core.common.utils import random_date
+from core.common.utils import get_random_date
 
 import random
 
 class Order(models.Model):
     number = models.PositiveIntegerField(_('Number'), blank=True, default='')
-    created_date = models.DateTimeField(_('Created Date'), default=random_date, blank=True)
+    created_date = models.DateTimeField(_('Created Date'), default=get_random_date(1), blank=True)
 
     def __str__(self):
         return f'{self.number}'
@@ -17,9 +17,12 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         try:
-            self.number = Order.objects.all().values('pk')[0]['pk']+1
+            ids = Order.objects.all().values('pk')[0]['pk']+1
+            self.number = ids
+            self.created_date = get_random_date(ids)
         except:
             self.number = 1
+            self.created_date = get_random_date(1)
         super(Order, self).save(*args, **kwargs)
 
 
@@ -37,7 +40,7 @@ class OrderItem(models.Model):
         ordering = ['-pk']
 
     def save(self, *args, **kwargs):
-        self.product_name = f'Товар-{random.randint(1, 50)}'
+        self.product_name = f'Товар-{random.randint(1, 200)}'
         self.product_price = random.randint(100, 9999)
         self.amount = random.randint(1, 10)
         super(OrderItem, self).save(*args, **kwargs)

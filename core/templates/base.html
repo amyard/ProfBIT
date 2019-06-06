@@ -46,7 +46,7 @@
     <div class="admin-panel align-items-center">
         <a href="{% url 'orders:base_view' %}" class='btn btn-outline-success d-block'>Создать заказы</a>
         <a href="{% url 'orders:order_by_date' %}" class='btn btn-outline-warning d-block my-2'>Заказы по датам</a>
-        <a href="#" class='btn btn-danger d-block' >Top 100</a>
+        <a href="{% url 'orders:top_100' %}" class='btn btn-danger d-block' >Топ 100 Товаров</a>
     </div>
 
 

@@ -6,7 +6,8 @@ from django.views.generic import View
 
 from core.orders.forms import GenerateOrderForm, OrderByDateForm
 from core.orders.models import Order, OrderItem
-from core.common.script import get_orders_by_date
+
+from core.common.script import get_orders_by_date, get_top_hundred_product
 
 from random import randint
 import pandas as pd
@@ -47,7 +48,6 @@ class OrderByDateView(View):
     form = OrderByDateForm
     model = Order
 
-
     def get(self, request, *args, **kwargs):
         context = {'form': self.form}
         return render(self.request, self.template_name, context)
@@ -65,4 +65,17 @@ class OrderByDateView(View):
             context={'orders':orders, 'form':self.form, 'df_result':df_result}
             return render(self.request, self.template_name, context)
         context = {'form': self.form(request.POST or None)}
+        return render(self.request, self.template_name, context)
+
+
+
+class TopHundredView(View):
+    template_name = 'orders/top_100.html'
+    model = Order
+
+    def get(self, request, *args, **kwargs):
+        df = pd.DataFrame(list(OrderItem.objects.all().order_by('-order_id__created_date').values('order_id__created_date', 'order_id', 'product_name', 'product_price','amount')))
+        df_result = get_top_hundred_product(df)
+
+        context={'df_result':df_result}
         return render(self.request, self.template_name, context)

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Top 100 Products - {{ block.super }}
+{% endblock %}
+
+
+
+{% block content %}
+
+<!--  CONTENT  -->
+<div class="container mt-5 content-orders-by-date">
+
+
+    {{ df_result|safe }}
+
+
+</div>
+
+
+{% endblock %}
