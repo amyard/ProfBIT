@@ -36,7 +36,7 @@ DATABASES = {
     'default': env.db('DJANGO_DATABASE_URL')
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'profbit-testtask.herokuapp.com']
 
 
 # Application definition
@@ -148,3 +148,9 @@ MEDIA_URL = '/media/'
 
 
 CRISPY_TEMPLATES_PACK = 'bootstrap4'
+
+
+import dj_database_url
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+

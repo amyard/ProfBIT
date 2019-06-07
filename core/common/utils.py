@@ -2,7 +2,7 @@ from random import randrange
 from datetime import timedelta, datetime, time
 from django.utils import timezone
 
-
+# generate random date
 def random_date():
     start = datetime.strptime('01/01/2018 9:00', '%m/%d/%Y %I:%M')
     end = datetime.now()

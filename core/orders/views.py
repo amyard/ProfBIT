@@ -22,7 +22,7 @@ class OrdersCreateView(View):
     message_send = 'Success: Orders and OrderItems were created.'
 
     def get(self, request, *args, **kwargs):
-        context = {'form':self.form}
+        context = {'form':self.form, 'oritem':OrderItem.objects.all(), 'orders':Order.objects.all()}
         return render(self.request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -36,7 +36,7 @@ class OrdersCreateView(View):
                     OrderItem.objects.create(order_id = md)
             messages.success(self.request, self.message_send)
             return HttpResponseRedirect('/')
-        context = {'form': self.form(request.POST or None)}
+        context = {'form': self.form(request.POST or None), 'oritem':OrderItem.objects.all(), 'orders':Order.objects.all()}
         return render(self.request, self.template_name, context)
 
 
