@@ -36,7 +36,7 @@ DATABASES = {
     'default': env.db('DJANGO_DATABASE_URL')
 }
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'profbit-testtask.herokuapp.com']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', 'profbit-tt.herokuapp.com']
 
 
 # Application definition
