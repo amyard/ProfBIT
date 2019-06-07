@@ -27,6 +27,7 @@ def get_orders_by_date(df):
         last = last[['Дата','Номер заказа','Сумма','Товары']]
         last['Номер заказа'] = last['Номер заказа'].apply(lambda x: f'Заказ {x}')
         last['Дата'] = last['Дата'].apply(lambda x: clean_date(x))
+        last.index += 1
         last = last.to_html(classes="table table-bordered df-tables")
         return last
     except:
