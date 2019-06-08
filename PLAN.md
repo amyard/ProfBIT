@@ -1,0 +1,1 @@
+1. views.py добавлена 2 строки с bulk_creates

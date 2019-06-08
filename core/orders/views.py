@@ -13,6 +13,8 @@ from core.common.utils import clean_date_for_orderbydateview
 from random import randint
 import pandas as pd
 
+import random
+from core.common.utils import get_random_date
 
 
 class OrdersCreateView(View):
@@ -30,10 +32,9 @@ class OrdersCreateView(View):
         if form.is_valid():
 
             numb = form.cleaned_data['number']
-            for i in range(1, numb+1):
-                md = self.model.objects.create()
-                for i in range(1, randint(2,6)):
-                    OrderItem.objects.create(order_id = md)
+            orders = Order.objects.bulk_create([ Order(number= Order.objects.all().values('pk')[0]['pk'] + i, created_date = get_random_date(Order.objects.all().values('pk')[0]['pk'] + i)) for i in range(1, numb+1)])
+            OrderItem.objects.bulk_create([ OrderItem(order_id=order, product_name=f'Товар-{random.randint(1, 200)}',
+                      product_price=random.randint(100, 9999), amount=random.randint(1, 10)) for order in orders for i in range(1, randint(2,6))])
             messages.success(self.request, self.message_send)
             return HttpResponseRedirect('/')
         context = {'form': self.form(request.POST or None), 'oritem':OrderItem.objects.all(), 'orders':Order.objects.all()}
