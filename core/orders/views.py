@@ -32,7 +32,13 @@ class OrdersCreateView(View):
         if form.is_valid():
 
             numb = form.cleaned_data['number']
-            orders = Order.objects.bulk_create([ Order(number= Order.objects.all().values('pk')[0]['pk'] + i, created_date = get_random_date(Order.objects.all().values('pk')[0]['pk'] + i)) for i in range(1, numb+1)])
+
+            # как только создается новая БД может выдать ошибку
+            try:
+                orders = Order.objects.bulk_create([ Order(number= Order.objects.all().values('pk')[0]['pk'] + i, created_date = get_random_date(Order.objects.all().values('pk')[0]['pk'] + i)) for i in range(1, numb+1)])
+            except:
+                orders = Order.objects.bulk_create([Order(number=1 + i,created_date=get_random_date(1 + i)) for i in range(1, numb + 1)])
+                
             OrderItem.objects.bulk_create([ OrderItem(order_id=order, product_name=f'Товар-{randint(1, 200)}',
                       product_price=randint(100, 9999), amount=randint(1, 10)) for order in orders for i in range(1, randint(2,6))])
             messages.success(self.request, self.message_send)
@@ -68,7 +74,7 @@ class OrderByDateView(View):
             # number of requests to db
             QueueToDBModel.objects.create(ip=get_ip_from_request(request), product_by_date=1)
 
-            context={'form':self.form, 'df_result':df_result, 'req_to_db':QueueToDBModel.objects.filter(product_by_date=1).count()}
+            context={'form':self.form, 'df_result':df_result}
             return render(self.request, self.template_name, context)
         context = {'form': self.form(request.POST or None)}
         return render(self.request, self.template_name, context)
@@ -86,5 +92,5 @@ class TopHundredView(View):
         # number of requests to db
         QueueToDBModel.objects.create(ip=get_ip_from_request(request), top_hundred=1)
 
-        context={'df_result':df_result, 'req_to_db':QueueToDBModel.objects.filter(top_hundred=1).count()}
+        context={'df_result':df_result}
         return render(self.request, self.template_name, context)

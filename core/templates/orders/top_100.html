@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load orders_tags %}
 {% load widget_tweaks %}
 
 {% block title %}
@@ -11,7 +12,7 @@
 
 <!--  CONTENT  -->
 <div class="container mt-5 content-orders-by-date">
-<h3 class="text-center mt-3">Количество запросов к БД: {{ req_to_db }}</h3>
+<h3 class="text-center mt-3">Количество запросов к БД: {% all_queue %}, из них, {% queue_top_hundred %} - это запросы по отображению топ 100 популярных продуктов.</h3>
 
     {{ df_result|safe }}
 
