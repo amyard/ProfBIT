@@ -25,3 +25,12 @@ def clean_date_for_orderbydateview(value):
     start = timezone.make_aware(start_date)
     return start
 
+
+# get ip address
+def get_ip_from_request(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip

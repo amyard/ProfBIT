@@ -6,15 +6,15 @@ from django.views.generic import View
 from django.utils import timezone
 
 from core.orders.forms import GenerateOrderForm, OrderByDateForm
-from core.orders.models import Order, OrderItem
+from core.orders.models import Order, OrderItem, QueueToDBModel
 from core.common.script import get_orders_by_date, get_top_hundred_product
-from core.common.utils import clean_date_for_orderbydateview
+from core.common.utils import clean_date_for_orderbydateview, get_random_date, get_ip_from_request
+
 
 from random import randint
 import pandas as pd
 
-import random
-from core.common.utils import get_random_date
+
 
 
 class OrdersCreateView(View):
@@ -33,8 +33,8 @@ class OrdersCreateView(View):
 
             numb = form.cleaned_data['number']
             orders = Order.objects.bulk_create([ Order(number= Order.objects.all().values('pk')[0]['pk'] + i, created_date = get_random_date(Order.objects.all().values('pk')[0]['pk'] + i)) for i in range(1, numb+1)])
-            OrderItem.objects.bulk_create([ OrderItem(order_id=order, product_name=f'Товар-{random.randint(1, 200)}',
-                      product_price=random.randint(100, 9999), amount=random.randint(1, 10)) for order in orders for i in range(1, randint(2,6))])
+            OrderItem.objects.bulk_create([ OrderItem(order_id=order, product_name=f'Товар-{randint(1, 200)}',
+                      product_price=randint(100, 9999), amount=randint(1, 10)) for order in orders for i in range(1, randint(2,6))])
             messages.success(self.request, self.message_send)
             return HttpResponseRedirect('/')
         context = {'form': self.form(request.POST or None), 'oritem':OrderItem.objects.all(), 'orders':Order.objects.all()}
@@ -49,7 +49,7 @@ class OrderByDateView(View):
     model = Order
 
     def get(self, request, *args, **kwargs):
-        context = {'form': self.form}
+        context = {'form': self.form, 'req_to_db':QueueToDBModel.objects.filter(product_by_date=1).count()}
         return render(self.request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -65,7 +65,10 @@ class OrderByDateView(View):
             df = pd.DataFrame(list(OrderItem.objects.filter(order_id__created_date__range=[start, end]).order_by('-order_id__created_date').values('order_id__created_date','order_id', 'product_name','product_price','amount')))
             df_result = get_orders_by_date(df)
 
-            context={'form':self.form, 'df_result':df_result}
+            # number of requests to db
+            QueueToDBModel.objects.create(ip=get_ip_from_request(request), product_by_date=1)
+
+            context={'form':self.form, 'df_result':df_result, 'req_to_db':QueueToDBModel.objects.filter(product_by_date=1).count()}
             return render(self.request, self.template_name, context)
         context = {'form': self.form(request.POST or None)}
         return render(self.request, self.template_name, context)
@@ -80,5 +83,8 @@ class TopHundredView(View):
         df = pd.DataFrame(list(OrderItem.objects.all().order_by('-order_id__created_date').values('order_id__created_date', 'order_id', 'product_name', 'product_price','amount')))
         df_result = get_top_hundred_product(df)
 
-        context={'df_result':df_result}
+        # number of requests to db
+        QueueToDBModel.objects.create(ip=get_ip_from_request(request), top_hundred=1)
+
+        context={'df_result':df_result, 'req_to_db':QueueToDBModel.objects.filter(top_hundred=1).count()}
         return render(self.request, self.template_name, context)

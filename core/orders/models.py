@@ -3,7 +3,10 @@ from django.utils.translation import ugettext_lazy as _
 
 from core.common.utils import get_random_date
 
+from model_utils.models import TimeStampedModel
 import random
+
+
 
 class Order(models.Model):
     number = models.PositiveIntegerField(_('Number'), blank=True, default='')
@@ -47,3 +50,14 @@ class OrderItem(models.Model):
 
     def full_price(self):
         return self.product_price*self.amount
+
+
+
+class QueueToDBModel(TimeStampedModel):
+    ip = models.GenericIPAddressField(blank=True, null=True)
+    product_by_date = models.PositiveIntegerField(blank=True, null=True)
+    top_hundred = models.PositiveIntegerField(blank=True, null=True)
+
+    def __str__(self):
+        return self.ip
+
